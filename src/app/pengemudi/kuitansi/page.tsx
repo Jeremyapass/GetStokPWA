@@ -18,9 +18,10 @@ const KuitansiPage = () => {
     totalHarga: "",
   });
   const [isProcessing, setIsProcessing] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+
   const startCamera = async () => {
     try {
       // Cek apakah perangkat adalah mobile
@@ -140,42 +141,30 @@ const KuitansiPage = () => {
 
   const RiwayatKuitansi = [
     {
-      tanggalPengisian: "12 Januari",
+      tanggalPengisian: "12 Januari 2025",
       platNomor: "B 1234 SUV",
     },
     {
-      tanggalPengisian: "11 Januari",
+      tanggalPengisian: "11 Januari 2025",
       platNomor: "B 1234 SUV",
     },
     {
-      tanggalPengisian: "10 Januari",
+      tanggalPengisian: "10 Januari 2025",
       platNomor: "B 1234 SUV",
     },
     {
-      tanggalPengisian: "9 Januari",
+      tanggalPengisian: "9 Januari 2025",
       platNomor: "B 1234 SUV",
     },
     {
-      tanggalPengisian: "8 Januari",
+      tanggalPengisian: "8 Januari 2025",
       platNomor: "B 1234 SUV",
     },
   ];
 
   return (
     <div className="flex flex-col items-center px-6 ">
-      <div className="mt-[68px]  flex justify-between w-full mb-[43px]">
-        <Image src={"/image/logo.png"} alt="Logo" width={172} height={172} />
-        <div className="flex rounded-[100px] bg-[#009EFF] items-center text-[#F1F1F1] p-1 gap-2">
-          <Image
-            src={"/image/UserImage.png"}
-            alt="Logo"
-            width={42}
-            height={42}
-          />
-          Driver
-          <i className="bx  bx-caret-down "></i>
-        </div>
-      </div>
+     
 
       <div className="flex flex-col gap-3  w-full text-[#707070] text-md">
         Lihat kuitansi
@@ -189,7 +178,7 @@ const KuitansiPage = () => {
         </label>
         <button
           className="text-white bg-[#009EFF] rounded-[8px] flex items-center justify-center h-[48px] gap-3"
-          onClick={() => setIsOpen({ ...isOpen, DeteksiKuitansi: true })}
+          onClick={() => setIsOpen({ ...isOpen, UnggahKuitansi: true })}
         >
           <i className="bx bx-upload"></i>
           Unggah
@@ -232,6 +221,88 @@ const KuitansiPage = () => {
           </div>
         ))}
       </div>
+
+      {isOpen.UnggahKuitansi && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 backdrop-blur-xs z-40"
+            onClick={() => setIsOpen({ ...isOpen, UnggahKuitansi: false })}
+          ></div>
+
+          {/* Modal */}
+          <div
+            className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col  p-[24px] z-50"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+          >
+            <div className="text-[#009EFF] flex-col font-bold text-xl flex gap-2.5 ">
+              <div className="flex gap-2">
+                <i className="bx bx-receipt text-2xl"></i>
+                Unggah Kuitansi
+              </div>
+              <p className="text-[#707070] text-xs font-medium">
+                Upload kuitansi yang telah anda peroleh disini.
+              </p>
+            </div>
+
+            <div className="flex  flex-col font-semibold gap-1">
+              Plat Nomor Kendaraan
+              <input
+                type="text"
+                placeholder="Masukkan nomor plat di sini"
+                className="p-4  rounded-[8px] border-[1px] border-[#D3D3D3] font-light"
+              />
+            </div>
+
+            <div className="flex flex-col font-semibold gap-1">
+              Upload Kuitansi
+              <label className="text-[#009EFF] flex gap-2 items-center justify-center bg-[#E6F5FF] p-3 border-[1px] border-dashed rounded-[8px] cursor-pointer">
+                <i className="bx bx-upload text-[#009EFF]"></i>
+                Unggah
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        const result = reader.result as string;
+                        setPreviewImage(result);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+              </label>
+              {previewImage && (
+                <div className="flex flex-col items-center mt-4">
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    className="w-full h-auto rounded-md"
+                  />
+                  <div className="flex gap-2 mt-2"></div>
+                </div>
+              )}
+            </div>
+
+            <button
+              className="bg-[#009EFF] p-4 rounded-[8px] text-white font-semibold"
+              onClick={() =>
+                setIsOpen({
+                  ...isOpen,
+                  UnggahKuitansi: false,
+                  DeteksiKuitansi: true,
+                })
+              }
+            >
+              Submit
+            </button>
+          </div>
+        </>
+      )}
 
       {isOpen.DeteksiKuitansi && (
         <>
@@ -282,78 +353,97 @@ const KuitansiPage = () => {
       )}
 
       {isOpen.HasilDeteksiKuitanasi && (
-        <div className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-[24px]">
-          <div className="text-[#009EFF] font-bold text-xl flex gap-2.5 items-center">
-            <i className="bx bx-receipt text-2xl"></i>
-            Deteksi Kuantitas OCR
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 backdrop-blur-xs z-40"
+            onClick={() =>
+              setIsOpen({ ...isOpen, HasilDeteksiKuitanasi: false })
+            }
+          ></div>
+
+          <div className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-[24px] z-50">
+            <div className="text-[#009EFF] font-bold text-xl flex gap-2.5 items-center">
+              <i className="bx bx-receipt text-2xl"></i>
+              Deteksi Kuantitas OCR
+            </div>
+
+            <div className="flex flex-col w-full gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-gray-600">Waktu</label>
+                <input
+                  type="text"
+                  value={ocrData.waktu}
+                  onChange={(e) =>
+                    setOcrData({ ...ocrData, waktu: e.target.value })
+                  }
+                  className="border rounded-md p-2"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-gray-600">Nama Produk</label>
+                <input
+                  type="text"
+                  value={ocrData.namaProduk}
+                  onChange={(e) =>
+                    setOcrData({ ...ocrData, namaProduk: e.target.value })
+                  }
+                  className="border rounded-md p-2"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-gray-600">Harga/Liter</label>
+                <input
+                  type="text"
+                  value={ocrData.hargaPerLiter}
+                  onChange={(e) =>
+                    setOcrData({ ...ocrData, hargaPerLiter: e.target.value })
+                  }
+                  className="border rounded-md p-2"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-gray-600">Volume</label>
+                <input
+                  type="text"
+                  value={ocrData.volume}
+                  onChange={(e) =>
+                    setOcrData({ ...ocrData, volume: e.target.value })
+                  }
+                  className="border rounded-md p-2"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-gray-600">Total Harga</label>
+                <input
+                  type="text"
+                  value={ocrData.totalHarga}
+                  onChange={(e) =>
+                    setOcrData({ ...ocrData, totalHarga: e.target.value })
+                  }
+                  className="border rounded-md p-2"
+                />
+              </div>
+
+                <button
+                className="bg-[#009EFF] text-white py-2 rounded-md mt-2"
+                onClick={() =>
+                  setIsOpen({
+                  UnggahKuitansi: false,
+                  DeteksiKuitansi: false,
+                  HasilDeteksiKuitanasi: false,
+                  })
+                }
+                >
+                Selesai
+                </button>
+            </div>
           </div>
-
-          <div className="flex flex-col w-full gap-4">
-            <div className="flex flex-col gap-2">
-              <label className="text-gray-600">Waktu</label>
-              <input
-                type="text"
-                value={ocrData.waktu}
-                onChange={(e) =>
-                  setOcrData({ ...ocrData, waktu: e.target.value })
-                }
-                className="border rounded-md p-2"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-gray-600">Nama Produk</label>
-              <input
-                type="text"
-                value={ocrData.namaProduk}
-                onChange={(e) =>
-                  setOcrData({ ...ocrData, namaProduk: e.target.value })
-                }
-                className="border rounded-md p-2"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-gray-600">Harga/Liter</label>
-              <input
-                type="text"
-                value={ocrData.hargaPerLiter}
-                onChange={(e) =>
-                  setOcrData({ ...ocrData, hargaPerLiter: e.target.value })
-                }
-                className="border rounded-md p-2"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-gray-600">Volume</label>
-              <input
-                type="text"
-                value={ocrData.volume}
-                onChange={(e) =>
-                  setOcrData({ ...ocrData, volume: e.target.value })
-                }
-                className="border rounded-md p-2"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label className="text-gray-600">Total Harga</label>
-              <input
-                type="text"
-                value={ocrData.totalHarga}
-                onChange={(e) =>
-                  setOcrData({ ...ocrData, totalHarga: e.target.value })
-                }
-                className="border rounded-md p-2"
-              />
-            </div>
-
-            <button className="bg-[#009EFF] text-white py-2 rounded-md mt-2">
-              Selesai
-            </button>
-          </div>
-        </div>
+        </>
       )}
     </div>
   );
