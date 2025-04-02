@@ -23,7 +23,13 @@ const KuitansiPage = () => {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const constraints = {
+        video: {
+          facingMode: { exact: "environment" }, // Memilih kamera belakang
+        },
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -31,7 +37,6 @@ const KuitansiPage = () => {
       console.error("Error accessing camera:", err);
     }
   };
-
   const stopCamera = () => {
     if (videoRef.current?.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
@@ -228,46 +233,46 @@ const KuitansiPage = () => {
         <>
           {/* Overlay */}
           <div
-        className="fixed inset-0 backdrop-blur-xs z-40"
-        onClick={() => setIsOpen({ ...isOpen, DeteksiKuitansi: false })}
+            className="fixed inset-0 backdrop-blur-xs z-40"
+            onClick={() => setIsOpen({ ...isOpen, DeteksiKuitansi: false })}
           ></div>
 
           {/* Modal */}
           <div
-        className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-[24px] z-50"
-        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+            className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-[24px] z-50"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
           >
-        <div className="text-[#009EFF] font-bold text-xl flex gap-2.5 items-center">
-          <i className="bx bx-receipt text-2xl"></i>
-          Deteksi Kuantitas OCR
-        </div>
+            <div className="text-[#009EFF] font-bold text-xl flex gap-2.5 items-center">
+              <i className="bx bx-receipt text-2xl"></i>
+              Deteksi Kuantitas OCR
+            </div>
 
-        <div className="w-[312px] h-[298px] aspect-video bg-gray-200 rounded-lg flex items-center justify-center relative">
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            className="w-full h-full object-cover rounded-lg"
-          />
-          <canvas ref={canvasRef} className="hidden" />
-          <div className="absolute bottom-4 flex gap-2">
-            <button
-          onClick={startCamera}
-          className="bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center gap-2"
-            >
-          <i className="bx bx-camera"></i>
-          Buka Kamera
-            </button>
-            <button
-          onClick={handleCapture}
-          disabled={isProcessing}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50"
-            >
-          <i className="bx bx-capture"></i>
-          {isProcessing ? "Memproses..." : "Ambil Foto"}
-            </button>
-          </div>
-        </div>
+            <div className="w-[312px] h-[298px] aspect-video bg-gray-200 rounded-lg flex items-center justify-center relative">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover rounded-lg"
+              />
+              <canvas ref={canvasRef} className="hidden" />
+              <div className="absolute bottom-4 flex gap-2">
+                <button
+                  onClick={startCamera}
+                  className="bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center gap-2"
+                >
+                  <i className="bx bx-camera"></i>
+                  Buka Kamera
+                </button>
+                <button
+                  onClick={handleCapture}
+                  disabled={isProcessing}
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50"
+                >
+                  <i className="bx bx-capture"></i>
+                  {isProcessing ? "Memproses..." : "Ambil Foto"}
+                </button>
+              </div>
+            </div>
           </div>
         </>
       )}
