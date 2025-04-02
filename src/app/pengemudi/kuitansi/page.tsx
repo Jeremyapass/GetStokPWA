@@ -198,17 +198,17 @@ const KuitansiPage = () => {
               width={15}
               height={15}
             />
-            <div className="flex flex-col items-center font-semibold text-xs">
+            <div className="flex flex-col items-center font-semibold text-[10px]">
               No
-              <p className="text-[#009EFF] text-sm">{index + 1}</p>
+              <p className="text-[#009EFF] text-xs">{index + 1}</p>
             </div>
-            <div className="flex flex-col items-center font-semibold text-xs">
+            <div className="flex flex-col items-center font-semibold text-[10px]">
               Tanggal Pengisian
-              <p className="text-[#009EFF] text-sm">{riwayat.tanggalPengisian}</p>
+              <p className="text-[#009EFF] text-xs">{riwayat.tanggalPengisian}</p>
             </div>
-            <div className="flex flex-col items-center font-semibold text-xs">
+            <div className="flex flex-col items-center font-semibold text-[10px]">
               Plat Nomor
-              <p className="text-[#009EFF] text-sm">{riwayat.platNomor}</p>
+              <p className="text-[#009EFF] text-xs">{riwayat.platNomor}</p>
             </div>
 
             <div className="flex gap-1 bg-[#FBB25B] px-3 py-1 rounded-[8px] justify-center items-center text-white font-semibold text-sm">
