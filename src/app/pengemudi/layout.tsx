@@ -18,7 +18,7 @@ const LayoutPengemudi = ({ children }: { children: React.ReactNode }) => {
   ];
 
   return (
-    <div className="flex flex-col sm:bg-green-500 h-screen">
+    <div className="flex flex-col sm:bg-green-500 h-screen w-full">
       {/* <div className=" flex flex-col h-screen w-[272px] bg-[#009EFF] p-[42px] items-center">
         <Image src={"/image/logo.png"} alt="logo" width={139} height={139} className="mb-[48px] bg-white p-2 rounded-md"/>
         <div className="flex flex-col gap-4 w-full">
@@ -32,7 +32,7 @@ const LayoutPengemudi = ({ children }: { children: React.ReactNode }) => {
       </div> */}
       {children}
 
-      <div className="flex w-full mt-auto bg-[#009EFF] justify-center gap-16 h-[68px]">
+      <div className="flex w-full mt-auto bg-[#009EFF] justify-center gap-8 h-[68px]">
         {sidebar.map((item, index) => (
           <div
             key={index}

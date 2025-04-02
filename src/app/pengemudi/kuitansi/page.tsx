@@ -153,7 +153,7 @@ const KuitansiPage = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center px-6">
+    <div className="flex flex-col items-center px-6 ">
       <div className="mt-[68px]  flex justify-between w-full mb-[43px]">
         <Image src={"/image/logo.png"} alt="Logo" width={172} height={172} />
         <div className="flex rounded-[100px] bg-[#009EFF] items-center text-[#F1F1F1] p-1 gap-2">

@@ -36,6 +36,9 @@ const LoginPage = () => {
   return (
     <div className=" flex bg-[url(/image/LoginImage.png)] bg-cover bg-center w-full h-screen justify-center items-center">
       <div className="bg-white flex flex-col p-8 rounded-[8px] w-[400px]">
+        <button className=" bg-red-500" onClick={() => router.push("/pengemudi/kuitansi")}>
+          cek Kuitansi
+        </button>
         <div className="flex flex-col items-center gap-[12px]">
           <Image src={"/image/logo.png"} alt="Logo GetStok" width={150} height={50} />
           <h1 className="text-2xl text-[#009EFF]">LOGIN</h1>
