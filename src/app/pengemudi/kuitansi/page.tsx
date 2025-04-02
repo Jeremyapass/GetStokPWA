@@ -178,10 +178,13 @@ const KuitansiPage = () => {
             className="h-[48px] border rounded-[8px] px-10 py-4 w-full"
           />
         </label>
-        <div className="text-white bg-[#009EFF] rounded-[8px] flex items-center justify-center h-[48px] gap-3">
+        <button
+          className="text-white bg-[#009EFF] rounded-[8px] flex items-center justify-center h-[48px] gap-3"
+          onClick={() => setIsOpen({ ...isOpen, DeteksiKuitansi: true })}
+        >
           <i className="bx bx-upload"></i>
           Unggah
-        </div>
+        </button>
       </div>
 
       <div className="mt-[32px] flex flex-col gap-3 w-full">
@@ -204,7 +207,9 @@ const KuitansiPage = () => {
             </div>
             <div className="flex flex-col items-center font-semibold text-[8px]">
               Tanggal Pengisian
-              <p className="text-[#009EFF] text-xs">{riwayat.tanggalPengisian}</p>
+              <p className="text-[#009EFF] text-xs">
+                {riwayat.tanggalPengisian}
+              </p>
             </div>
             <div className="flex flex-col items-center font-semibold text-[10px]">
               Plat Nomor
@@ -220,39 +225,51 @@ const KuitansiPage = () => {
       </div>
 
       {isOpen.DeteksiKuitansi && (
-        <div className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-[24px]">
-          <div className="text-[#009EFF] font-bold text-xl flex gap-2.5 items-center">
-            <i className="bx bx-receipt text-2xl"></i>
-            Deteksi Kuantitas OCR
-          </div>
+        <>
+          {/* Overlay */}
+          <div
+        className="fixed inset-0 backdrop-blur-xs z-40"
+        onClick={() => setIsOpen({ ...isOpen, DeteksiKuitansi: false })}
+          ></div>
 
-          <div className="w-[312px] h-[298px] aspect-video bg-gray-200 rounded-lg flex items-center justify-center relative">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <canvas ref={canvasRef} className="hidden" />
-            <div className="absolute bottom-4 flex gap-2">
-              <button
-                onClick={startCamera}
-                className="bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center gap-2"
-              >
-                <i className="bx bx-camera"></i>
-                Buka Kamera
-              </button>
-              <button
-                onClick={handleCapture}
-                disabled={isProcessing}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50"
-              >
-                <i className="bx bx-capture"></i>
-                {isProcessing ? "Memproses..." : "Ambil Foto"}
-              </button>
-            </div>{" "}
+          {/* Modal */}
+          <div
+        className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-[24px] z-50"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+          >
+        <div className="text-[#009EFF] font-bold text-xl flex gap-2.5 items-center">
+          <i className="bx bx-receipt text-2xl"></i>
+          Deteksi Kuantitas OCR
+        </div>
+
+        <div className="w-[312px] h-[298px] aspect-video bg-gray-200 rounded-lg flex items-center justify-center relative">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="w-full h-full object-cover rounded-lg"
+          />
+          <canvas ref={canvasRef} className="hidden" />
+          <div className="absolute bottom-4 flex gap-2">
+            <button
+          onClick={startCamera}
+          className="bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center gap-2"
+            >
+          <i className="bx bx-camera"></i>
+          Buka Kamera
+            </button>
+            <button
+          onClick={handleCapture}
+          disabled={isProcessing}
+          className="bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 disabled:opacity-50"
+            >
+          <i className="bx bx-capture"></i>
+          {isProcessing ? "Memproses..." : "Ambil Foto"}
+            </button>
           </div>
         </div>
+          </div>
+        </>
       )}
 
       {isOpen.HasilDeteksiKuitanasi && (
