@@ -20,12 +20,15 @@ const KuitansiPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
+  
   const startCamera = async () => {
     try {
+      // Cek apakah perangkat adalah mobile
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
       const constraints = {
         video: {
-          facingMode: { exact: "environment" }, // Memilih kamera belakang
+          facingMode: isMobile ? { ideal: "environment" } : "user", // Gunakan ideal agar lebih fleksibel
         },
       };
 
@@ -34,9 +37,10 @@ const KuitansiPage = () => {
         videoRef.current.srcObject = stream;
       }
     } catch (err) {
-      console.error("Error accessing camera:", err);
+      console.error("Error accessing camera:", err.name, err.message);
     }
   };
+
   const stopCamera = () => {
     if (videoRef.current?.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
