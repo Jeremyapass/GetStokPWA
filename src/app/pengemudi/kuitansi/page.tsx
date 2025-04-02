@@ -198,11 +198,11 @@ const KuitansiPage = () => {
               width={15}
               height={15}
             />
-            <div className="flex flex-col items-center font-semibold text-[10px]">
+            <div className="flex flex-col items-center font-semibold text-[8px]">
               No
               <p className="text-[#009EFF] text-xs">{index + 1}</p>
             </div>
-            <div className="flex flex-col items-center font-semibold text-[10px]">
+            <div className="flex flex-col items-center font-semibold text-[8px]">
               Tanggal Pengisian
               <p className="text-[#009EFF] text-xs">{riwayat.tanggalPengisian}</p>
             </div>
