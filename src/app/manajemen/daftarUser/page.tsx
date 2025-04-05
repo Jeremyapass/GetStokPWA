@@ -54,13 +54,13 @@ const daftarUser = [
   },
 ];
 
-const ValidasiRutePage = () => {
+const DaftarUserPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [status, setStatus] = useState("Active");
   const [role, setRole] = useState("Planner");
 
   return (
-    <div className="h-full px-8">
+    <div className="h-full pt-[12%] px-8">
       <div className="bg-white w-full justify-between flex items-center">
         <label className="relative px-6 py-3 rounded-[8px] border-[1px] border-[#F1F1F1] flex items-center gap-2">
           <i className="bx bx-search text-2xl text-[#009EFF]"></i>
@@ -203,4 +203,4 @@ const ValidasiRutePage = () => {
   );
 };
 
-export default ValidasiRutePage;
+export default DaftarUserPage;

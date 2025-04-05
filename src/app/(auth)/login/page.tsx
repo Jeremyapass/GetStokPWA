@@ -25,8 +25,14 @@ const LoginPage = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = () => {
-    router.push("/pengemudi/kuitansi");
+  const onSubmit = (data: FormValues) => {
+    if (data.email === "pengemudi@gmail.com") {
+      router.push("/pengemudi/rute");
+    } else if (data.email === "manajemen@gmail.com"){
+      router.push("/manajemen/dashboard");
+    } else if (data.email === "planner@gmail.com"){
+    router.push("/planner/buat-rute");
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -36,17 +42,28 @@ const LoginPage = () => {
   return (
     <div className=" flex bg-[url(/image/LoginImage.png)] bg-cover bg-center w-full h-screen justify-center items-center px-6">
       <div className="bg-white flex flex-col p-8 rounded-[8px] sm:w-[400px] w-full">
-        <button className=" bg-red-500" onClick={() => router.push("/pengemudi/kuitansi")}>
+        <button
+          className=" bg-red-500"
+          onClick={() => router.push("/pengemudi/kuitansi")}
+        >
           cek Kuitansi
         </button>
         <div className="flex flex-col items-center gap-[8px] mb-3">
-          <Image src={"/image/logo.png"} alt="Logo GetStok" width={150} height={50} />
+          <Image
+            src={"/image/logo.png"}
+            alt="Logo GetStok"
+            width={150}
+            height={50}
+          />
           <h1 className="text-2xl text-[#009EFF] font">Masuk</h1>
           <h2 className="test-[#707070] font-light">Selamat datang kembali</h2>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-sm font-normal flex items-center gap-2">
+            <label
+              htmlFor="email"
+              className="text-sm font-normal flex items-center gap-2"
+            >
               <i className="bx bx-envelope text-gray-500 text-xl"></i>
               Email
             </label>
@@ -59,11 +76,18 @@ const LoginPage = () => {
                 placeholder="Masukkan email"
               />
             </div>
-            {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
+            {errors.email && (
+              <span className="text-red-500 text-sm">
+                {errors.email.message}
+              </span>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-sm font-normal flex items-center gap-2">
+            <label
+              htmlFor="password"
+              className="text-sm font-normal flex items-center gap-2"
+            >
               <i className="bx bx-lock-alt text-gray-500 text-xl"></i>
               Password
             </label>
@@ -80,11 +104,17 @@ const LoginPage = () => {
                 onClick={togglePasswordVisibility}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
-                <i className={`bx ${showPassword ? "bx-hide" : "bx-show"} text-xl`}></i>
+                <i
+                  className={`bx ${
+                    showPassword ? "bx-hide" : "bx-show"
+                  } text-xl`}
+                ></i>
               </button>
             </div>
             {errors.password && (
-              <span className="text-red-500 text-sm">{errors.password.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.password.message}
+              </span>
             )}
           </div>
 
