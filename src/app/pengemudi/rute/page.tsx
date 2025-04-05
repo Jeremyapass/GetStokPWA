@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const RiwayatRuteTerbaru = [
@@ -20,7 +21,8 @@ const RutePage = () => {
     TandaiRute: false,
     AkhiriRute: false,
   });
-
+  const route = useRouter();
+  
   return (
     <div className="px-6 flex flex-col gap-4">
       {/* Header Section */}
@@ -90,9 +92,12 @@ const RutePage = () => {
               <span>Plat Nomor</span>
               <p className="text-[#009EFF] text-xs">{riwayat.platNomor}</p>
             </div>
-            <div className="flex gap-1 bg-[#009EFF] px-3 py-1 rounded-[8px] justify-center items-center text-white font-semibold text-sm cursor-pointer">
+            <button
+              onClick={() => route.push("/pengemudi/rute/1")}
+              className="flex gap-1 bg-[#009EFF] px-3 py-1 rounded-[8px] justify-center items-center text-white font-semibold text-sm cursor-pointer"
+            >
               Detail
-            </div>
+            </button>
           </div>
         ))}
       </div>
