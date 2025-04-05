@@ -28,10 +28,10 @@ const LoginPage = () => {
   const onSubmit = (data: FormValues) => {
     if (data.email === "pengemudi@gmail.com") {
       router.push("/pengemudi/rute");
-    } else if (data.email === "manajemen@gmail.com"){
+    } else if (data.email === "manajemen@gmail.com") {
       router.push("/manajemen/dashboard");
-    } else if (data.email === "planner@gmail.com"){
-    router.push("/planner/buat-rute");
+    } else if (data.email === "planner@gmail.com") {
+      router.push("/planner/buat-rute");
     }
   };
 
@@ -42,7 +42,6 @@ const LoginPage = () => {
   return (
     <div className=" flex bg-[url(/image/LoginImage.png)] bg-cover bg-center w-full h-screen justify-center items-center px-6">
       <div className="bg-white flex flex-col p-8 rounded-[8px] sm:w-[400px] w-full">
-      
         <div className="flex flex-col items-center gap-[8px] mb-3">
           <Image
             src={"/image/logo.png"}
@@ -120,6 +119,10 @@ const LoginPage = () => {
             Masuk
           </button>
         </form>
+        <a href="/ganti-password" className="font-light text-sm text-end text-[#BF9105] mt-1">
+          Lupa Password?
+          
+        </a>
       </div>
     </div>
   );
