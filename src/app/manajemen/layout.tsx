@@ -251,7 +251,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
 
         {/* Panel Status Terkini - Muncul jika ada notifikasi */}
         {isOpen !== null && (
-          <div className="fixed top-0 right-2 md:right-5 h-[60vh] w-[95%] md:w-fit flex flex-col shadow-md rounded-[8px] bg-white p-4 gap-2 z-[4] max-h-[300px] overflow-auto">
+          <div className="fixed top-0 sm:top-auto right-2 sm:bottom-0 sm:right-10 h-[50vh] w-[95%] md:w-fit flex flex-col shadow-md rounded-[8px] bg-white p-4 gap-2 z-[4] sm:h-[600px] overflow-auto">
             <button
               onClick={() => {
                 setIsOpen(null);

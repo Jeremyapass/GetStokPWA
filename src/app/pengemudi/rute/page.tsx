@@ -126,23 +126,23 @@ const RutePage = () => {
               width={15}
               height={15}
             />
-            <div className="flex flex-col items-center font-semibold text-[8px]">
+            <div className="flex flex-col items-center font-semibold text-[8px] sm:text-base">
               <span>No</span>
-              <p className="text-[#009EFF] text-xs">{index + 1}</p>
+              <p className="text-[#009EFF] text-xs sm:text-base">{index + 1}</p>
             </div>
-            <div className="flex flex-col items-center font-semibold text-[8px]">
+            <div className="flex flex-col items-center font-semibold text-[8px] sm:text-base">
               <span>Tanggal Keberangkatan</span>
-              <p className="text-[#009EFF] text-xs">
+              <p className="text-[#009EFF] text-xs sm:text-base">
                 {riwayat.tanggalPengisian}
               </p>
             </div>
-            <div className="flex flex-col items-center font-semibold text-[10px]">
+            <div className="flex flex-col items-center font-semibold text-[10px] sm:text-base">
               <span>Plat Nomor</span>
-              <p className="text-[#009EFF] text-xs">{riwayat.platNomor}</p>
+              <p className="text-[#009EFF] text-xs sm:text-base">{riwayat.platNomor}</p>
             </div>
             <button
               onClick={() => route.push("/pengemudi/rute/1")}
-              className="flex gap-1 bg-[#009EFF] px-3 py-1 rounded-[8px] justify-center items-center text-white font-semibold text-sm cursor-pointer"
+              className="flex gap-1 bg-[#009EFF] px-3 py-1 rounded-[8px] justify-center items-center text-white font-semibold text-sm cursor-pointer sm:text-base"
             >
               Detail
             </button>

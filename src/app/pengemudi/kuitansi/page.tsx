@@ -199,23 +199,23 @@ const KuitansiPage = () => {
               width={15}
               height={15}
             />
-            <div className="flex flex-col items-center font-semibold text-[8px]">
+            <div className="flex flex-col items-center font-semibold text-[8px] sm:text-base ">
               No
-              <p className="text-[#009EFF] text-xs">{index + 1}</p>
+              <p className="text-[#009EFF] text-xs sm:text-base">{index + 1}</p>
             </div>
-            <div className="flex flex-col items-center font-semibold text-[8px]">
+            <div className="flex flex-col items-center font-semibold text-[8px] sm:text-base">
               Tanggal Pengisian
-              <p className="text-[#009EFF] text-xs">
+              <p className="text-[#009EFF] text-[11px] sm:text-base">
                 {riwayat.tanggalPengisian}
               </p>
             </div>
-            <div className="flex flex-col items-center font-semibold text-[10px]">
+            <div className="flex flex-col items-center font-semibold text-[10px] sm:text-base">
               Plat Nomor
-              <p className="text-[#009EFF] text-[10px]">{riwayat.platNomor}</p>
+              <p className="text-[#009EFF] text-[10px] sm:text-base">{riwayat.platNomor}</p>
             </div>
 
-            <div className="flex gap-1 bg-[#FBB25B] px-3 py-1 rounded-[8px] justify-center items-center text-white font-semibold text-sm">
-              <i className="bx bx-image-alt"></i>
+            <div className="flex gap-1 bg-[#FBB25B] px-3 py-1 rounded-[8px] justify-center items-center text-white font-semibold text-sm sm:text-base">
+              <i className="bx bx-image-alt sm:text-base"></i>
               Bukti foto
             </div>
           </div>

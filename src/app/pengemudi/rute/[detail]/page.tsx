@@ -48,7 +48,7 @@ const DetailRutePage = () => {
   const center: LatLngExpression = [-6.3088, 106.8525];
 
   return (
-    <div className="px-6 flex flex-col gap-3 h-full">
+    <div className="px-6 flex flex-col gap-3 h-full -mt-4">
       <button onClick={()=> route.push('/pengemudi/rute')} className="bg-[#009EFF] text-white px-6 py-3 h-fit rounded-[8px] flex items-center gap-2 font-semibold mb-2 w-fit">
         <i className="bx bx-arrow-back"></i>
         Detail Validasi rute
