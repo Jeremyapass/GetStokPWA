@@ -31,7 +31,7 @@ const LayoutPlanner = ({ children }: { children: React.ReactNode }) => {
      
 
       <div className="flex w-full ">
-        <div className=" flex flex-col h-screen w-[272px] bg-[#009EFF] p-[25px] items-center">
+        <div className=" flex flex-col h-screen w-[272px]  p-[25px] items-center">
           <Image
             src={"/image/logo.png"}
             alt="logo"

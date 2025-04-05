@@ -1,7 +1,38 @@
 "use client";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import "leaflet/dist/leaflet.css";
+
+// Leaflet Map dynamic imports (avoid SSR issues)
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+
+// Fix Leaflet icon issue - wrapped in useEffect to ensure it only runs on client-side
+const fixLeafletIcon = () => {
+  import("leaflet").then((L) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl:
+        "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+      iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+      shadowUrl:
+        "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    });
+  });
+};
 
 const RiwayatRuteTerbaru = [
   { tanggalPengisian: "12 Januari 2025", platNomor: "B 1234 SUV" },
@@ -22,7 +53,11 @@ const RutePage = () => {
     AkhiriRute: false,
   });
   const route = useRouter();
-  
+
+  React.useEffect(() => {
+    fixLeafletIcon();
+  }, []);
+
   return (
     <div className="px-6 flex flex-col gap-4">
       {/* Header Section */}
@@ -34,8 +69,21 @@ const RutePage = () => {
       </div>
 
       {/* Map Placeholder */}
-      <div className="bg-gray-200 h-[149px] flex items-center justify-center">
-        <span>di sini nanti map</span>
+      <div
+        className={`bg-gray-200 h-[149px] flex items-center justify-center transition-all duration-300 ${
+          isOpen.TandaiRute || isOpen.AkhiriRute
+            ? "blur-sm pointer-events-none"
+            : ""
+        }`}
+      >
+        <MapContainer
+          center={[-6.2, 106.8]}
+          zoom={13}
+          style={{ height: "100%", width: "100%" }}
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <Marker position={[-6.2, 106.8]} />
+        </MapContainer>
       </div>
 
       {/* Action Buttons */}
@@ -57,7 +105,7 @@ const RutePage = () => {
       </div>
 
       {/* Riwayat Header */}
-      <div className="flex justify-between items-center text-[#707070] ">
+      <div className="flex justify-between items-center text-[#707070]">
         <span>Riwayat Rute Terbaru</span>
         <p className="underline text-[#009EFF] text-sm cursor-pointer">
           Lihat semua
@@ -65,7 +113,7 @@ const RutePage = () => {
       </div>
 
       {/* Riwayat List */}
-      <div className=" flex flex-col gap-3 w-full overflow-y-auto h-[200px]">
+      <div className="flex flex-col gap-3 w-full overflow-y-auto h-[200px]">
         {RiwayatRuteTerbaru.map((riwayat, index) => (
           <div
             key={index}
@@ -102,18 +150,17 @@ const RutePage = () => {
         ))}
       </div>
 
+      {/* Modal: Tandai Rute */}
       {isOpen.TandaiRute && (
         <>
-          {/* Overlay */}
           <div
             className="fixed inset-0 backdrop-blur-xs z-40"
             onClick={() => setIsOpen({ ...isOpen, TandaiRute: false })}
           ></div>
 
-          {/* Modal */}
           <div
-            className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col  p-[24px] z-50"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+            className="bg-white w-[354px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col p-[24px] z-50"
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="text-[#009EFF] font-bold text-xl flex-col flex gap-2.5">
               <div className="flex items-center gap-2.5">
@@ -127,10 +174,17 @@ const RutePage = () => {
               </p>
 
               <div className="bg-gray-200 h-[149px] flex items-center justify-center">
-                <span>di sini nanti map</span>
+                <MapContainer
+                  center={[-6.3, 106.85]}
+                  zoom={13}
+                  style={{ height: "100%", width: "100%" }}
+                >
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <Marker position={[-6.3, 106.85]} />
+                </MapContainer>
               </div>
 
-              <div className="flex justify-between items-center ">
+              <div className="flex justify-between items-center">
                 <i className="bx bx-edit text-[#707070] text-3xl "></i>
                 <div className="text-[#DC3545] text-sm font-semibold flex items-center gap-2 cursor-pointer border-1 border[-#DC3545] rounded-[8px] px-3 py-1">
                   <i className="bx bx-undo text-3xl"></i>
@@ -163,22 +217,32 @@ const RutePage = () => {
         </>
       )}
 
+      {/* Modal: Akhiri Rute */}
       {isOpen.AkhiriRute && (
         <>
-          {/* Overlay */}
           <div
             className="fixed inset-0 backdrop-blur-xs z-40"
             onClick={() => setIsOpen({ ...isOpen, AkhiriRute: false })}
           ></div>
 
-          {/* Modal */}
           <div
-            className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col  p-[24px] z-50"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+            className="bg-white w-[354px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col p-[24px] z-50"
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="text-[#009EFF] font-bold text-xl flex gap-2.5 ">
+            <div className="text-[#009EFF] font-bold text-xl flex gap-2.5">
               <i className="bx bx-map-pin text-2xl"></i>
               Akhiri Rute
+            </div>
+
+            <div className="bg-gray-200 h-[149px] flex items-center justify-center">
+              <MapContainer
+                center={[-6.3, 106.85]}
+                zoom={13}
+                style={{ height: "100%", width: "100%" }}
+              >
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <Marker position={[-6.3, 106.85]} />
+              </MapContainer>
             </div>
 
             <p className="text-[#707070] text-xs font-normal">
@@ -189,7 +253,7 @@ const RutePage = () => {
               Alasan
               <input
                 type="text"
-                className="text-sm border-[1px]  border-[#707070] text-[#707070] p-4 rounded-[8px]"
+                className="text-sm border-[1px] border-[#707070] text-[#707070] p-4 rounded-[8px]"
                 placeholder="Berisikan alasan anda di sini"
               />
             </div>
