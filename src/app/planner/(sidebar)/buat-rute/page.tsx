@@ -45,9 +45,9 @@ const BuatRutePage = () => {
         </select>
       </div>
 
-      <div className="flex flex-col gap-1 w-full text-[#545454] font-semibold">
+      <div className="flex flex-col gap-1 w-full text-[#545454] ">
         <div className="flex gap-1 text-sm items-center">
-          <p>Alamat Asal</p>
+          <p className="font-semibold">Alamat Asal</p>
         </div>
         <input
           type="text"
@@ -55,9 +55,9 @@ const BuatRutePage = () => {
           className="text-sm px-6 py-4 border-[2px] border-[#F1F1F1] rounded-[8px]"
         />
       </div>
-      <div className="flex flex-col gap-1 w-full text-[#545454] font-semibold">
+      <div className="flex flex-col gap-1 w-full text-[#545454] ">
         <div className="flex gap-1 text-sm items-center">
-          <p>Alamat Tujuan</p>
+          <p className="font-semibold">Alamat Tujuan</p>
         </div>
         <input
           type="text"

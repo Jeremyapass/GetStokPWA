@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "boxicons/css/boxicons.min.css";
-import { createWorker } from "tesseract.js";
+// import { createWorker } from "tesseract.js";
 import Image from "next/image";
 
 const KuitansiPage = () => {
@@ -11,133 +11,133 @@ const KuitansiPage = () => {
     HasilDeteksiKuitanasi: false,
   });
   const [ocrData, setOcrData] = useState({
-    waktu: "",
-    namaProduk: "",
-    hargaPerLiter: "",
-    volume: "",
-    totalHarga: "",
+    waktu: "10/01/2025 - 10:30",
+    namaProduk: "Bensin Pertalite",
+    hargaPerLiter: "10.000",
+    volume: "10 liter",
+    totalHarga: "100.000",
   });
-  const [isProcessing, setIsProcessing] = useState(false);
+  // const [isProcessing, setIsProcessing] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  // const videoRef = useRef<HTMLVideoElement>(null);
+  // const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const startCamera = async () => {
-    try {
-      // Cek apakah perangkat adalah mobile
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  // const startCamera = async () => {
+  //   try {
+  //     // Cek apakah perangkat adalah mobile
+  //     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-      const constraints = {
-        video: {
-          facingMode: isMobile ? { ideal: "environment" } : "user", // Gunakan ideal agar lebih fleksibel
-        },
-      };
+  //     const constraints = {
+  //       video: {
+  //         facingMode: isMobile ? { ideal: "environment" } : "user", // Gunakan ideal agar lebih fleksibel
+  //       },
+  //     };
 
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      console.error("Error accessing camera:", err.name, err.message);
-    }
-  };
+  //     const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  //     if (videoRef.current) {
+  //       videoRef.current.srcObject = stream;
+  //     }
+  //   } catch (err) {
+  //     console.error("Error accessing camera:", err.name, err.message);
+  //   }
+  // };
 
-  const stopCamera = () => {
-    if (videoRef.current?.srcObject) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      stream.getTracks().forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-    }
-  };
+  // const stopCamera = () => {
+  //   if (videoRef.current?.srcObject) {
+  //     const stream = videoRef.current.srcObject as MediaStream;
+  //     stream.getTracks().forEach((track) => track.stop());
+  //     videoRef.current.srcObject = null;
+  //   }
+  // };
 
-  const captureImage = () => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
+  // const captureImage = () => {
+  //   if (videoRef.current && canvasRef.current) {
+  //     const video = videoRef.current;
+  //     const canvas = canvasRef.current;
 
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext("2d")?.drawImage(video, 0, 0);
+  //     canvas.width = video.videoWidth;
+  //     canvas.height = video.videoHeight;
+  //     canvas.getContext("2d")?.drawImage(video, 0, 0);
 
-      return canvas.toDataURL("image/jpeg");
-    }
-    return null;
-  };
+  //     return canvas.toDataURL("image/jpeg");
+  //   }
+  //   return null;
+  // };
 
-  const processOCR = async (imageData: string) => {
-    setIsProcessing(true);
-    try {
-      const worker = await createWorker("ind");
-      const {
-        data: { text },
-      } = await worker.recognize(imageData);
-      await worker.terminate();
+  // const processOCR = async (imageData: string) => {
+  //   setIsProcessing(true);
+  //   try {
+  //     const worker = await createWorker("ind");
+  //     const {
+  //       data: { text },
+  //     } = await worker.recognize(imageData);
+  //     await worker.terminate();
 
-      console.log("Hasil OCR mentah:", text);
+  //     console.log("Hasil OCR mentah:", text);
 
-      // Proses teks hasil OCR
-      const lines = text.split("\n");
-      console.log("Baris-baris hasil OCR:", lines);
+  //     // Proses teks hasil OCR
+  //     const lines = text.split("\n");
+  //     console.log("Baris-baris hasil OCR:", lines);
 
-      const extractedData = {
-        waktu: "",
-        namaProduk: "",
-        hargaPerLiter: "",
-        volume: "",
-        totalHarga: "",
-      };
+  //     const extractedData = {
+  //       waktu: "",
+  //       namaProduk: "",
+  //       hargaPerLiter: "",
+  //       volume: "",
+  //       totalHarga: "",
+  //     };
 
-      // Logika ekstraksi data dari teks OCR
-      lines.forEach((line) => {
-        const lowerLine = line.toLowerCase();
-        console.log("Memproses baris:", line);
-        if (lowerLine.includes("waktu") || lowerLine.includes("jam")) {
-          extractedData.waktu = line;
-          console.log("Ditemukan waktu:", line);
-        } else if (
-          lowerLine.includes("produk") ||
-          lowerLine.includes("bensin")
-        ) {
-          extractedData.namaProduk = line;
-          console.log("Ditemukan nama produk:", line);
-        } else if (
-          lowerLine.includes("harga") &&
-          !lowerLine.includes("total")
-        ) {
-          extractedData.hargaPerLiter = line;
-          console.log("Ditemukan harga per liter:", line);
-        } else if (lowerLine.includes("volume")) {
-          extractedData.volume = line;
-          console.log("Ditemukan volume:", line);
-        } else if (lowerLine.includes("total") && lowerLine.includes("harga")) {
-          extractedData.totalHarga = line;
-          console.log("Ditemukan total harga:", line);
-        }
-      });
+  //     // Logika ekstraksi data dari teks OCR
+  //     lines.forEach((line) => {
+  //       const lowerLine = line.toLowerCase();
+  //       console.log("Memproses baris:", line);
+  //       if (lowerLine.includes("waktu") || lowerLine.includes("jam")) {
+  //         extractedData.waktu = line;
+  //         console.log("Ditemukan waktu:", line);
+  //       } else if (
+  //         lowerLine.includes("produk") ||
+  //         lowerLine.includes("bensin")
+  //       ) {
+  //         extractedData.namaProduk = line;
+  //         console.log("Ditemukan nama produk:", line);
+  //       } else if (
+  //         lowerLine.includes("harga") &&
+  //         !lowerLine.includes("total")
+  //       ) {
+  //         extractedData.hargaPerLiter = line;
+  //         console.log("Ditemukan harga per liter:", line);
+  //       } else if (lowerLine.includes("volume")) {
+  //         extractedData.volume = line;
+  //         console.log("Ditemukan volume:", line);
+  //       } else if (lowerLine.includes("total") && lowerLine.includes("harga")) {
+  //         extractedData.totalHarga = line;
+  //         console.log("Ditemukan total harga:", line);
+  //       }
+  //     });
 
-      console.log("Data yang diekstrak:", extractedData);
+  //     console.log("Data yang diekstrak:", extractedData);
 
-      setOcrData(extractedData);
-      // Mengubah state untuk menampilkan hasil deteksi
-      setIsOpen({
-        UnggahKuitansi: false,
-        DeteksiKuitansi: false,
-        HasilDeteksiKuitanasi: true,
-      });
-    } catch (error) {
-      console.error("Error processing OCR:", error);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  //     setOcrData(extractedData);
+  //     // Mengubah state untuk menampilkan hasil deteksi
+  //     setIsOpen({
+  //       UnggahKuitansi: false,
+  //       DeteksiKuitansi: false,
+  //       HasilDeteksiKuitanasi: true,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error processing OCR:", error);
+  //   } finally {
+  //     setIsProcessing(false);
+  //   }
+  // };
 
-  const handleCapture = async () => {
-    const imageData = captureImage();
-    if (imageData) {
-      await processOCR(imageData);
-    }
-    stopCamera();
-  };
+  // const handleCapture = async () => {
+  //   const imageData = captureImage();
+  //   if (imageData) {
+  //     await processOCR(imageData);
+  //   }
+  //   stopCamera();
+  // };
 
   const RiwayatKuitansi = [
     {
@@ -294,7 +294,7 @@ const KuitansiPage = () => {
                 setIsOpen({
                   ...isOpen,
                   UnggahKuitansi: false,
-                  DeteksiKuitansi: true,
+                  HasilDeteksiKuitanasi: true,
                 })
               }
             >
@@ -304,15 +304,15 @@ const KuitansiPage = () => {
         </>
       )}
 
-      {isOpen.DeteksiKuitansi && (
+       {/* {isOpen.DeteksiKuitansi && (
         <>
-          {/* Overlay */}
+          
           <div
             className="fixed inset-0 backdrop-blur-xs z-40"
             onClick={() => setIsOpen({ ...isOpen, DeteksiKuitansi: false })}
           ></div>
 
-          {/* Modal */}
+          
           <div
             className="bg-white w-[354px] fixed top-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-[24px] z-50"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
@@ -350,7 +350,7 @@ const KuitansiPage = () => {
             </div>
           </div>
         </>
-      )}
+      )} */}
 
       {isOpen.HasilDeteksiKuitanasi && (
         <>
