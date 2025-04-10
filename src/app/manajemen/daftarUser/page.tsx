@@ -72,6 +72,7 @@ const DaftarUserPage = () => {
     inputData: false,
     konfirmasi: false,
     notifikasiBerhasil: false,
+    editPengguna: false,
   });
   const [status, setStatus] = useState("Active");
   const [role, setRole] = useState("Planner");
@@ -136,12 +137,101 @@ const DaftarUserPage = () => {
               </div>
             </div>
 
-            <button className="mt-3 sm:mt-0 px-3 py-2 rounded-[8px] text-sm flex justify-center items-center w-full sm:w-[145px] bg-[#008EE6] text-white font-semibold">
+            <button
+              onClick={() => setIsOpen({ ...isOpen, editPengguna: true })}
+              className="mt-3 sm:mt-0 px-3 py-2 rounded-[8px] text-sm flex justify-center items-center w-full sm:w-[145px] bg-[#008EE6] text-white font-semibold"
+            >
               Edit Pengguna
             </button>
           </div>
         ))}
       </div>
+
+      {isOpen.editPengguna && (
+        <>
+          <div
+            className="fixed inset-0 backdrop-blur-sm z-40"
+            onClick={() => setIsOpen({ ...isOpen, editPengguna: false })}
+          ></div>
+
+          <div
+            className="bg-white w-[90%] sm:w-[354px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[8px] gap-6 flex flex-col items-center p-6 z-50"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Nama */}
+            <div className="flex flex-col gap-1 w-full text-[#545454] font-semibold">
+              <div className="flex gap-2 text-sm items-center">
+                <i className="bx bx-user text-xl"></i>
+                <p>Nama</p>
+              </div>
+              <input
+                type="text"
+                placeholder="Input nama"
+                className="text-sm px-4 py-2 border border-[#F1F1F1] rounded-[8px]"
+              />
+            </div>
+
+            {/* Email */}
+            <div className="flex flex-col gap-1 w-full text-[#545454] font-semibold">
+              <div className="flex gap-2 text-sm items-center">
+                <i className="bx bx-mail-send text-xl"></i>
+                <p>Email</p>
+              </div>
+              <input
+                type="text"
+                placeholder="Input email"
+                className="text-sm px-4 py-2 border border-[#F1F1F1] rounded-[8px]"
+              />
+            </div>
+
+            {/* Status Dropdown */}
+            <div className="flex flex-col gap-1 w-full text-[#545454] font-semibold">
+              <div className="flex gap-2 text-sm items-center">
+                <i className="bx bx-user-pin text-xl"></i>
+                <p>Status</p>
+              </div>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="text-sm px-4 py-2 border border-[#F1F1F1] rounded-[8px]"
+              >
+                <option value="Active">Active</option>
+                <option value="Unactive">Unactive</option>
+              </select>
+            </div>
+
+            {/* Role Dropdown */}
+            <div className="flex flex-col gap-1 w-full text-[#545454] font-semibold">
+              <div className="flex gap-2 text-sm items-center">
+                <i className="bx bx-user-circle text-xl"></i>
+                <p>Role</p>
+              </div>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="text-sm px-4 py-2 border border-[#F1F1F1] rounded-[8px]"
+              >
+                <option value="Driver">Driver</option>
+                <option value="Planner">Planner</option>
+                <option value="Management">Management</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-4 font-semibold w-full">
+              <button
+                className="flex-1 px-8 py-3 border text-[#009EFF] border-[#009EFF] rounded-[8px]"
+                onClick={() => setIsOpen({ ...isOpen, editPengguna: false })}
+              >
+                Batal
+              </button>
+              <button className="flex-1 flex items-center gap-3 px-8 py-3 bg-[#009EFF] text-white rounded-[8px]">
+                <i className="bx bx-save text-lg"></i>
+                Simpan
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Modal */}
       {isOpen.inputData && (
