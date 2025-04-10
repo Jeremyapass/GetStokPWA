@@ -113,7 +113,7 @@ const RutePage = () => {
       </div>
 
       {/* Riwayat List */}
-      <div className="flex flex-col gap-3 w-full overflow-y-auto h-[200px]">
+      <div className="flex flex-col gap-3 w-full overflow-y-auto h-[290px] sm:h-[200px]">
         {RiwayatRuteTerbaru.map((riwayat, index) => (
           <div
             key={index}
