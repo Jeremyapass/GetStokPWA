@@ -205,7 +205,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
 
           {/* Profile Info */}
           <div className=" md:flex gap-2">
-            <div className="flex rounded-[100px] bg-[#009EFF] items-center h-[50px] sm:w-[212px] text-[#F1F1F1] p-1 gap-2">
+            <div className="flex justify-between rounded-[100px] bg-[#009EFF] items-center h-[50px] sm:w-[212px] text-[#F1F1F1] p-1 gap-2">
               <Image
                 src={"/image/UserImage.png"}
                 alt="Logo"
@@ -213,7 +213,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
                 height={42}
               />
                 <p className="hidden sm:block">Management</p>
-              <i className="bx bx-caret-down"></i>
+              <i className="bx bx-caret-down mr-3"></i>
             </div>
           </div>
         </div>
