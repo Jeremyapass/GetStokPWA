@@ -25,13 +25,16 @@ const aktivitas = [
 
 const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
   const [isOpen, setIsOpen] = React.useState<number | null>(null);
+  const [isOpenData, setIsOpenData] = React.useState<boolean>(false);
+  const [isOpenSensor, setIsOpenSensor] = React.useState<boolean>(true);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const route = useRouter();
-  const curretnPath = usePathname();
+  const currentPath = usePathname();
   const chartRef = React.useRef<ApexCharts | null>(null);
+  const [isActive, setIsActive] = React.useState(0);
 
   useEffect(() => {
-    if (isOpen === null) return;
+    if (isOpen === null || !isOpenSensor) return;
     const chartElement = document.querySelector("#sales-chart");
     if (!chartElement) return;
 
@@ -84,7 +87,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
         chartRef.current = null;
       }
     };
-  }, [isOpen]);
+  }, [isOpen, isOpenSensor]);
 
   return (
     <div className="flex relative">
@@ -104,7 +107,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
           {sidebar.map((item, index) => (
             <button
               onClick={() =>
-                curretnPath === "/manajemen/dashboard" &&
+                currentPath === "/manajemen/dashboard" &&
                 setIsOpen(isOpen === index ? null : index)
               }
               key={index}
@@ -140,7 +143,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
       </div>
 
       {/* Sidebar Mobile Drawer */}
-      {mobileMenuOpen && curretnPath === "/manajemen/dashboard" && (
+      {mobileMenuOpen && currentPath === "/manajemen/dashboard" && (
         <div
           className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-40"
           onClick={() => setMobileMenuOpen(false)}
@@ -155,7 +158,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
                 <button
                   onClick={() => {
                     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                    curretnPath === "/manajemen/dashboard" &&
+                    currentPath === "/manajemen/dashboard" &&
                       setIsOpen(isOpen === index ? null : index);
                     setMobileMenuOpen(false);
                   }}
@@ -212,7 +215,7 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
                 width={42}
                 height={42}
               />
-                <p className="hidden sm:block">Management</p>
+              <p className="hidden sm:block">Management</p>
               <i className="bx bx-caret-down mr-3"></i>
             </div>
           </div>
@@ -223,10 +226,22 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
           <div className="bottom-0 absolute bg-white shadow-md py-3 rounded-lg self-end z-[3] w-full md:w-[75%] px-4">
             <div className="flex flex-col md:flex-row justify-between mb-2 gap-4">
               <div className="flex gap-2">
-                <button className="p-2 bg-[#009EFF] text-white rounded-[8px] flex gap-2 items-center text-sm">
+                <button
+                  onClick={() => {
+                  setIsOpenSensor(true);
+                  setIsOpenData(false);
+                  }}
+                  className={`p-2 ${isOpenSensor ? 'bg-[#009EFF] text-white' : 'text-[#009EFF] border border-[#009EFF]'} rounded-[8px] flex gap-2 items-center text-sm`}
+                >
                   <i className="bx bx-radar text-2xl"></i> Sensor
                 </button>
-                <button className="p-2 text-[#009EFF] border border-[#009EFF] rounded-[8px] flex gap-2 items-center text-sm">
+                <button
+                  onClick={() => {
+                  setIsOpenSensor(false);
+                  setIsOpenData(true);
+                  }}
+                  className={`p-2 ${isOpenData ? 'bg-[#009EFF] text-white' : 'text-[#009EFF] border border-[#009EFF]'} rounded-[8px] flex gap-2 items-center text-sm`}
+                >
                   <i className="bx bx-data text-2xl"></i> Data
                 </button>
               </div>
@@ -245,7 +260,73 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
                 </div>
               </div>
             </div>
-            <div id="sales-chart" className="w-full h-[200px]" />
+            {isOpenSensor && (
+              <div id="sales-chart" className="w-full h-[200px]" />
+            )}
+            {isOpenData && (
+              <div>
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-[#009EFF] text-white">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-sm font-normal"
+                      >
+                        Waktu
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-sm font-normal"
+                      >
+                        Nama Produk
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-sm font-normal"
+                      >
+                        Harga/Liter
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-sm font-normal"
+                      >
+                        Volume
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-sm font-normal"
+                      >
+                        Total Harga
+                      </th>
+                    </tr>
+                  </thead>
+                    <tbody className="bg-white divide-y divide-gray-500 border-gray-500">
+                    {[1, 2, 3, 4].map((row, index) => (
+                      <tr
+                      key={index}
+                
+                      >
+                      <td className="px-4 py-2 text-center whitespace-nowrap text-sm border border-gray-500">
+                        10/01/2025 - 10:30 
+                      </td>
+                      <td className="px-4 py-2 text-center whitespace-nowrap text-sm border border-gray-500">
+                        Bensin Pertalite
+                      </td>
+                      <td className="px-4 py-2 text-center whitespace-nowrap text-sm border border-gray-500">
+                        10.000
+                      </td>
+                      <td className="px-4 py-2 text-center whitespace-nowrap text-sm  border border-gray-500">
+                        10 liter
+                      </td>
+                      <td className="px-4 py-2 text-center whitespace-nowrap text-sm border border-gray-500">
+                        100.000
+                      </td>
+                      </tr>
+                    ))}
+                    </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
@@ -271,35 +352,53 @@ const LayoutManajemen: React.FC<LayoutManajemenProps> = ({ children }) => {
             </div>
             <span className="text-xs text-[#009EFF] mt-2">Aktivitas</span>
             <div className="flex flex-col gap-2 overflow-y-auto text-xs">
-              {aktivitas.map((item, index) => (
-                <div
-                  key={index}
-                  className="border border-[#F1F1F1] p-3 rounded-md"
-                >
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium text-[#484848]">
-                      {item.day}
-                      {item.date && (
-                        <span className="text-[#ADADAD] font-light ml-2">
-                          {item.date}
-                        </span>
-                      )}
-                    </span>
-                    <Image
-                      src={"/icons/MarkDarkYellow.svg"}
-                      alt="Tanda seru"
-                      width={18}
-                      height={18}
-                    />
+              {aktivitas.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`border rounded-md p-3 cursor-pointer ${
+                      isActive === index
+                        ? "border-[#009EFF]"
+                        : "border-[#F1F1F1]"
+                    }`}
+                    onClick={() => setIsActive(index)}
+                  >
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-medium text-[#484848]">
+                        {item.day}
+                        {item.date && (
+                          <span className="text-[#ADADAD] font-light ml-2">
+                            {item.date}
+                          </span>
+                        )}
+                      </span>
+                      <div className="flex gap-2 items-center">
+                        {isActive === index && (
+                          <div className="text-[#BC8644] border-2 border-[#BC8644] rounded-[6px] px-[4px] py-[2px] text-xs font-semibold h-fit">
+                            11
+                          </div>
+                        )}
+                        <Image
+                          src={
+                            isActive === index
+                              ? "/icons/MarkDarkYellow.svg"
+                              : "/icons/MarkBlack.svg"
+                          }
+                          alt="Tanda seru"
+                          width={18}
+                          height={18}
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full h-1 rounded-[8px] bg-gray-300 relative">
+                      <div
+                        className="h-full bg-blue-500 rounded-[8px]"
+                        style={{ width: "45%" }}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full h-1 rounded-[8px] bg-gray-300 relative">
-                    <div
-                      className="h-full bg-blue-500 rounded-[8px]"
-                      style={{ width: "45%" }}
-                    />
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
